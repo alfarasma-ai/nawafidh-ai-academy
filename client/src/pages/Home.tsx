@@ -4,6 +4,7 @@ import {
   ArrowRight,
   ArrowUpLeft,
   BarChart3,
+  Building2,
   BookOpen,
   Bot,
   BrainCircuit,
@@ -13,15 +14,19 @@ import {
   Clock3,
   Code2,
   GraduationCap,
+  Lightbulb,
   Layers3,
   Linkedin,
   Menu,
   MessageCircle,
+  Navigation,
+  RotateCcw,
   Mic2,
   MousePointer2,
   Play,
   Quote,
   Send,
+  ShieldCheck,
   Sparkles,
   Star,
   Target,
@@ -133,7 +138,14 @@ const navItems = [
   ["اكتشف الأكاديمية", "about"],
   ["المسارات", "courses"],
   ["كيف نتعلم؟", "method"],
+  ["موقعنا", "location"],
   ["آراء المتعلمين", "stories"],
+];
+
+const advisorQuestions = [
+  { key: "goal", title: "ما الذي تريد تحقيقه أولًا؟", options: ["أبدأ من الصفر", "أبني منتجًا ذكيًا", "أطوّر عملي بالـ AI"] },
+  { key: "level", title: "كيف تصف خبرتك الحالية؟", options: ["جديد تمامًا", "لدي أساسيات", "أعمل في التقنية"] },
+  { key: "time", title: "كم وقتًا تستطيع تخصيصه أسبوعيًا؟", options: ["ساعتان أو أقل", "3–5 ساعات", "أكثر من 5 ساعات"] },
 ];
 
 function scrollToId(id: string) {
@@ -148,6 +160,10 @@ export default function Home() {
   const [showTop, setShowTop] = useState(false);
   const [email, setEmail] = useState("");
   const [joined, setJoined] = useState(false);
+  const [advisorOpen, setAdvisorOpen] = useState(false);
+  const [advisorStep, setAdvisorStep] = useState(0);
+  const [advisorAnswers, setAdvisorAnswers] = useState<string[]>([]);
+  const [advisorResult, setAdvisorResult] = useState<Course | null>(null);
 
   useEffect(() => {
     const onScroll = () => setShowTop(window.scrollY > 560);
@@ -168,6 +184,20 @@ export default function Home() {
   };
 
   const openComingSoon = () => toast("هذه الميزة قادمة قريبًا", { description: "نحن نجهّز لك تجربة أكثر ذكاءً." });
+
+  const chooseAdvisorAnswer = (answer: string) => {
+    const nextAnswers = [...advisorAnswers, answer];
+    setAdvisorAnswers(nextAnswers);
+    if (advisorStep < advisorQuestions.length - 1) {
+      setAdvisorStep(advisorStep + 1);
+      return;
+    }
+    const goal = nextAnswers[0];
+    const recommended = goal === "أبدأ من الصفر" ? courses[1] : goal === "أبني منتجًا ذكيًا" ? courses[2] : courses[0];
+    setAdvisorResult(recommended);
+  };
+
+  const resetAdvisor = () => { setAdvisorStep(0); setAdvisorAnswers([]); setAdvisorResult(null); };
 
   return (
     <div dir="rtl" className="min-h-screen overflow-x-hidden bg-[#05030e] text-white selection:bg-fuchsia-400/30 selection:text-fuchsia-100">
@@ -270,6 +300,16 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="location-section section-space" id="location">
+          <div className="container">
+            <div className="location-heading"><div><div className="section-kicker">نلتقي بك على أرض الواقع</div><h2 className="section-title">نافذتك<br /><span className="gradient-text">في قلب عمّان.</span></h2></div><p>نستقبلك داخل مجمع النقابات المهنية — نقابة المهندسين الأردنيين، لنحوّل فضولك إلى خطوة عملية.</p></div>
+            <div className="location-card">
+              <div className="location-map-wrap"><div className="map-art" aria-label="خريطة توضيحية لموقع مجمع النقابات المهنية"><span className="map-neighborhood neighborhood-one">الشميساني</span><span className="map-neighborhood neighborhood-two">الدوار الثالث</span><span className="map-neighborhood neighborhood-three">شارع عبد الحميد شرف</span><span className="map-road road-one" /><span className="map-road road-two" /><span className="map-road road-three" /><span className="map-block block-one" /><span className="map-block block-two" /><span className="map-block block-three" /><span className="map-pin"><span><Building2 size={18} /></span><b>نوافذ AI</b></span><div className="map-compass"><Navigation size={14} /><span>N</span></div><div className="map-caption"><span className="map-live-dot" /> موقعنا في مجمع النقابات المهنية</div></div><iframe title="خريطة موقع نوافذ AI في مجمع النقابات المهنية" src="https://www.google.com/maps?q=Jordan+Engineers+Association,+Amman&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade" /></div>
+              <div className="location-details"><span className="location-badge"><Building2 size={17} /> مقر الأكاديمية</span><h3>مجمع النقابات المهنية</h3><p>نقابة المهندسين الأردنيين<br />الشميساني، عمّان — الأردن</p><div className="location-info"><div><ShieldCheck size={17} /><span><b>مواعيد الزيارة</b><small>الأحد – الخميس · 9:00–17:00</small></span></div><div><Navigation size={17} /><span><b>الوصول أسهل مما تتوقع</b><small>مواقف قريبة ومواصلات متاحة</small></span></div></div><a className="button-primary location-cta" href="https://www.google.com/maps/search/?api=1&query=Jordan+Engineers+Association+Amman" target="_blank" rel="noreferrer">افتح الاتجاهات <ArrowUpLeft size={17} /></a></div>
+            </div>
+          </div>
+        </section>
+
         <section className="section-space stories-section" id="stories">
           <div className="container">
             <div className="section-heading-row compact"><div><div className="section-kicker">أصوات من المستقبل</div><h2 className="section-title">هم بدأوا من هنا.</h2></div><div className="stories-controls"><button onClick={openComingSoon} aria-label="القصة السابقة"><ArrowRight size={18} /></button><button onClick={openComingSoon} aria-label="القصة التالية"><ArrowLeft size={18} /></button></div></div>
@@ -296,6 +336,8 @@ export default function Home() {
       <footer className="site-footer"><div className="container flex flex-col gap-8 py-10 lg:flex-row lg:items-center lg:justify-between"><div><button className="brand-mark" onClick={() => scrollToId("top")}><span className="brand-orbit"><BrainCircuit size={20} /></span><span className="brand-name">نوافذ <b>AI</b></span></button><p className="footer-note">نتعلم اليوم لنصنع غدًا أكثر ذكاءً.</p></div><div className="footer-links"><button onClick={() => scrollToId("courses")}>المسارات</button><button onClick={() => scrollToId("method")}>منهجيتنا</button><button onClick={() => scrollToId("stories")}>قصص المتعلمين</button><button onClick={openComingSoon}>تواصل معنا</button></div><div className="footer-socials"><button onClick={openComingSoon} aria-label="LinkedIn"><Linkedin size={17} /></button><button onClick={openComingSoon} aria-label="Twitter"><Twitter size={17} /></button><button onClick={openComingSoon} aria-label="البريد الإلكتروني"><Send size={17} /></button></div></div><div className="container footer-bottom"><span>© 2025 نوافذ AI — نصنع قادة المستقبل.</span><span>مصمم بشغف في المنطقة العربية</span></div></footer>
 
       {showTop && <button className="back-top" onClick={() => scrollToId("top")} aria-label="العودة للأعلى"><ArrowUpLeft size={18} /></button>}
+      <button className={`advisor-launcher ${advisorOpen ? "is-open" : ""}`} onClick={() => setAdvisorOpen(!advisorOpen)} aria-label="فتح مستشار المسارات"><span className="advisor-pulse" /><Lightbulb size={20} /><span>مستشار المسارات</span></button>
+      {advisorOpen && <aside className="advisor-panel" aria-label="مستشار المسارات"><div className="advisor-header"><div className="advisor-avatar"><Bot size={21} /></div><div><b>مستشار نوافذ</b><small>يساعدك تختار بذكاء</small></div><button onClick={() => setAdvisorOpen(false)} aria-label="إغلاق المستشار"><X size={18} /></button></div>{advisorResult ? <div className="advisor-result"><span className="advisor-result-icon"><advisorResult.icon size={23} /></span><div className="advisor-kicker"><Sparkles size={14} /> توصيتنا لك</div><h3>{advisorResult.title}</h3><p>هذا المسار يطابق هدفك الحالي. ابدأ بخطوات قصيرة، ثم ابنِ مشروعًا يثبت تقدمك.</p><div className="advisor-result-meta"><span><Clock3 size={14} /> {advisorResult.duration}</span><span><BookOpen size={14} /> {advisorResult.lessons}</span></div><button className="button-primary w-full" onClick={() => { setAdvisorOpen(false); setModalCourse(advisorResult); }}>استكشف المسار <ArrowLeft size={16} /></button><button className="advisor-reset" onClick={resetAdvisor}><RotateCcw size={14} /> ابدأ من جديد</button></div> : <div className="advisor-body"><div className="advisor-intro"><span className="advisor-spark"><Sparkles size={18} /></span><h3>خلّينا نعرفك أكثر.</h3><p>3 أسئلة سريعة، وبعدها أعطيك نقطة البداية الأقرب لك.</p></div><div className="advisor-progress"><span style={{ width: `${((advisorStep + 1) / advisorQuestions.length) * 100}%` }} /></div><div className="advisor-step-count">السؤال {advisorStep + 1} من {advisorQuestions.length}</div><h4>{advisorQuestions[advisorStep].title}</h4><div className="advisor-options">{advisorQuestions[advisorStep].options.map((option) => <button key={option} onClick={() => chooseAdvisorAnswer(option)}>{option}<ArrowLeft size={15} /></button>)}</div></div>}</aside>}
       {modalCourse && <div className="modal-backdrop" onClick={() => setModalCourse(null)}><div className="course-modal" onClick={(event) => event.stopPropagation()}><button className="modal-close" onClick={() => setModalCourse(null)} aria-label="إغلاق"><X size={18} /></button><div className={`course-icon modal-icon ${modalCourse.color}`}><modalCourse.icon size={25} /></div><span className="section-kicker">مسار نوافذ</span><h2>{modalCourse.title}</h2><p>{modalCourse.description}</p><div className="modal-details"><span><Clock3 size={15} /> {modalCourse.duration}</span><span><BookOpen size={15} /> {modalCourse.lessons}</span><span><Users size={15} /> {modalCourse.students} متعلم</span></div><button className="button-primary w-full" onClick={() => { setModalCourse(null); scrollToId("newsletter"); }}>أرسل لي تفاصيل المسار <ArrowUpLeft size={17} /></button></div></div>}
     </div>
   );
