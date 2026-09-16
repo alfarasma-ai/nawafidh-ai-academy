@@ -203,7 +203,7 @@ export default function Home() {
       <main id="top">
         <section className="hero-section relative">
           <div className="hero-grid" />
-          <div className="hero-image" aria-hidden="true" style={{ backgroundImage: `linear-gradient(90deg, rgba(5,3,14,.12) 0%, rgba(5,3,14,.28) 45%, #05030e 80%), url('${import.meta.env.BASE_URL}assets/nawafidh-ai-orbit.png')` }} />
+          <div className="hero-image" aria-hidden="true" style={{ backgroundImage: `linear-gradient(90deg, rgba(5,3,14,.12) 0%, rgba(5,3,14,.28) 45%, #05030e 80%), url('${import.meta.env.BASE_URL}assets/nawafidh-ai-orbit.webp')` }} />
           <div className="container relative z-10 grid min-h-[710px] items-center gap-12 pb-20 pt-20 lg:grid-cols-[1.02fr_.98fr] lg:pt-28">
             <div className="hero-copy">
               <div className="eyebrow animate-in-up"><span className="eyebrow-dot" /> المستقبل لا ينتظر، اصنعه الآن</div>
